@@ -10,14 +10,14 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
       - './src'
 
   # Step 2: Push image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
 
   # Step 3: Create Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -29,7 +29,7 @@ steps:
       - 'release-$SHORT_SHA'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=asia-south1'
-      - '--images=flask-app=asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - '--images=flask-app=asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
 
 images:
-  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'

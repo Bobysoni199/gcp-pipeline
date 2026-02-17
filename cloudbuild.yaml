@@ -19,17 +19,17 @@ steps:
       - 'push'
       - 'asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
 
-  # Step 3: Create Cloud Deploy release
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'deploy'
-      - 'releases'
-      - 'create'
-      - 'release-$SHORT_SHA'
-      - '--delivery-pipeline=flask-pipeline'
-      - '--region=asia-south1'
-      - '--images=flask-app=asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
+  # # Step 3: Create Cloud Deploy release
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   entrypoint: gcloud
+  #   args:
+  #     - 'deploy'
+  #     - 'releases'
+  #     - 'create'
+  #     - 'release-$SHORT_SHA'
+  #     - '--delivery-pipeline=flask-pipeline'
+  #     - '--region=asia-south1'
+  #     - '--images=flask-app=asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'
 
 images:
   - 'asia-south1-docker.pkg.dev/$PROJECT_ID/flask-app/flask-app:$SHORT_SHA'

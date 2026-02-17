@@ -1,19 +1,25 @@
+# Use custom service account
+serviceAccount: projects/PROJECT-ID/serviceAccounts/firebase-adminsdk@PROJECT-ID.iam.gserviceaccount.com
+
+# Store logs in your bucket
+logsBucket: gs://my-build-logs-bucket12990
+
 steps:
-  # Build Docker Image
+  # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
-      - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
       - './src'
 
-  # Push Image
+  # Step 2: Push image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
 
-  # Create Release in Cloud Deploy
+  # Step 3: Create Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -23,7 +29,7 @@ steps:
       - 'release-$SHORT_SHA'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=asia-south1'
-      - '--images=flask-app=LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - '--images=flask-app=asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
 
 images:
-  - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'

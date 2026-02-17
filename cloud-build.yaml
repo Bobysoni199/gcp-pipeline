@@ -1,0 +1,29 @@
+steps:
+  # Build Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+      - './src'
+
+  # Push Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+
+  # Create Release in Cloud Deploy
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'deploy'
+      - 'releases'
+      - 'create'
+      - 'release-$SHORT_SHA'
+      - '--delivery-pipeline=flask-pipeline'
+      - '--region=asia-south1'
+      - '--images=flask-app=LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
+
+images:
+  - 'LOCATION-docker.pkg.dev/$PROJECT_ID/my-repo/flask-app:$SHORT_SHA'
